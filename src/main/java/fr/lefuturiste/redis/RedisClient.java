@@ -22,6 +22,7 @@ public class RedisClient {
     private final Socket socket;
     private BufferedReader input;
     private PrintWriter output;
+    private final String RESP_SUCCESS = "+OK";
 
     public RedisClient() throws IOException {
         this(6379);
@@ -40,7 +41,7 @@ public class RedisClient {
     public boolean auth(String password) throws IOException {
         this.output.println("AUTH " + password);
         String result = this.input.readLine();
-        return result.equals("+OK");
+        return result.equals(RESP_SUCCESS);
     }
 
     /*
@@ -57,7 +58,7 @@ public class RedisClient {
 
     public boolean set(String key, String value) throws IOException {
         this.output.println("SET " + key + " \"" + value + "\"");
-        return this.input.readLine().equals("+OK");
+        return this.input.readLine().equals(RESP_SUCCESS);
     }
 
     public boolean del(String key) throws IOException {
@@ -69,7 +70,7 @@ public class RedisClient {
         String jsonString = object.toString(0);
         jsonString = jsonString.replaceAll("'", "");
         this.output.println("SET " + key + " '" + jsonString + "'");
-        return this.input.readLine().equals("+OK");
+        return this.input.readLine().equals(RESP_SUCCESS);
     }
 
     public JSONObject getJson(String key) throws IOException {
@@ -92,7 +93,7 @@ public class RedisClient {
 
     public Boolean flushAll() throws IOException {
         this.output.println("FLUSHALL");
-        return this.input.readLine().equals("+OK");
+        return this.input.readLine().equals(RESP_SUCCESS);
     }
 
     public Socket getSocket() {
