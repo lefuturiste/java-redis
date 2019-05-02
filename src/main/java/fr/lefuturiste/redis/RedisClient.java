@@ -16,11 +16,12 @@ import java.net.Socket;
  * TODO: injection protection from user input
  */
 public class RedisClient {
+    private final Socket socket;
     private BufferedReader input;
     private PrintWriter output;
 
     public RedisClient() throws IOException {
-        this("127.0.0.1", 6380);
+        this(6379);
     }
 
     public RedisClient(int port) throws IOException {
@@ -28,9 +29,9 @@ public class RedisClient {
     }
 
     public RedisClient(String host, int port) throws IOException {
-        Socket socket = new Socket(host, port);
-        this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.output = new PrintWriter(socket.getOutputStream(), true);
+        this.socket = new Socket(host, port);
+        this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        this.output = new PrintWriter(this.socket.getOutputStream(), true);
     }
 
     public boolean auth(String password) throws IOException {
@@ -64,7 +65,6 @@ public class RedisClient {
     public boolean setJson(String key, JSONObject object) throws IOException {
         String jsonString = object.toString(0);
         jsonString = jsonString.replaceAll("'", "");
-        System.out.println(jsonString);
         this.output.println("SET " + key + " '" + jsonString + "'");
         return this.input.readLine().equals("+OK");
     }
@@ -75,5 +75,19 @@ public class RedisClient {
         }
         String result = this.get(key);
         return new JSONObject(result);
+    }
+
+    public boolean ping() throws IOException {
+        this.output.println("PING");
+        return this.input.readLine().equals("+PONG");
+    }
+
+    public Boolean exists(String key) throws IOException {
+        this.output.println("EXISTS " + key);
+        return this.input.readLine().equals(":1");
+    }
+
+    public Socket getSocket() {
+        return this.socket;
     }
 }
