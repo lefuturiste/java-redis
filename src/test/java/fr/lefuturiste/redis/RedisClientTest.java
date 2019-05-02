@@ -1,7 +1,5 @@
 package fr.lefuturiste.redis;
 
-import static org.junit.Assert.assertTrue;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -10,9 +8,9 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.io.IOException;
-import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
+
+import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.JVM)
 public class RedisClientTest {
