@@ -107,4 +107,16 @@ public class RedisClientTest {
         this.authRedisClient();
         Assert.assertEquals(jsonObject.toString(), this.redisClient.getJson(jsonKey).toString());
     }
+
+    @Test
+    public void shouldFlushAllKeysSuccessfully() throws IOException {
+        this.authRedisClient();
+        Assert.assertTrue(this.redisClient.set("key1", "value1"));
+        Assert.assertTrue(this.redisClient.set("key2", "value2"));
+        Assert.assertTrue(this.redisClient.exists("key1"));
+        Assert.assertTrue(this.redisClient.exists("key2"));
+        Assert.assertTrue(this.redisClient.flushAll());
+        Assert.assertFalse(this.redisClient.exists("key1"));
+        Assert.assertFalse(this.redisClient.exists("key2"));
+    }
 }

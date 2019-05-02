@@ -90,6 +90,11 @@ public class RedisClient {
         return this.input.readLine().equals(":1");
     }
 
+    public Boolean flushAll() throws IOException {
+        this.output.println("FLUSHALL");
+        return this.input.readLine().equals("+OK");
+    }
+
     public Socket getSocket() {
         return this.socket;
     }
