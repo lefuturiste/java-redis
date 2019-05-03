@@ -15,8 +15,6 @@ import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.JVM)
 public class RedisClientTest {
-    private final int redisPort = 6379;
-    private final String redisHost = "127.0.0.1";
     private final String password = "root";
     private static String key = UUID.randomUUID().toString();
     private static String value = UUID.randomUUID().toString();
@@ -52,9 +50,11 @@ public class RedisClientTest {
     @Test
     public void shouldGetTheSocketSuccessfully() {
         Assert.assertNotNull(this.redisClient.getSocket());
-        Assert.assertEquals(this.redisHost,
+        String redisHost = "127.0.0.1";
+        int redisPort = 6379;
+        Assert.assertEquals(redisHost,
                 this.redisClient.getSocket().getInetAddress().toString().replace("/", ""));
-        Assert.assertEquals(this.redisPort, this.redisClient.getSocket().getPort());
+        Assert.assertEquals(redisPort, this.redisClient.getSocket().getPort());
     }
 
     @Test
