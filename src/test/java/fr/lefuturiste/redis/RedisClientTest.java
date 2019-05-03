@@ -22,7 +22,7 @@ public class RedisClientTest {
     private static String value = UUID.randomUUID().toString();
     private static String jsonKey = UUID.randomUUID().toString();
     private static JSONObject jsonObject = new JSONObject()
-            .put("string", "string")
+            .put("string", "str\"ing hello'o'o'o")
             .put("boolean", true)
             .put("array", new JSONArray().put(1).put(2).put(3).put(4))
             .put("int", 123)
@@ -130,7 +130,15 @@ public class RedisClientTest {
         Assert.assertEquals(-1, this.redisClient.ttl(key));
         Assert.assertTrue(this.redisClient.expire(key, Duration.ofSeconds(1)));
         Assert.assertEquals(1, this.redisClient.ttl(key));
-        Thread.sleep(1000);
+        Thread.sleep(1500);
         Assert.assertEquals(-2, this.redisClient.ttl(key));
+    }
+
+    @Test
+    public void shouldEscapeJsonStringSuccessfully() throws IOException {
+        this.authRedisClient();
+        this.redisClient.flushAll();
+        this.redisClient.setJson(jsonKey, jsonObject);
+        Assert.assertEquals(jsonObject.toString(), this.redisClient.getJson(jsonKey).toString());
     }
 }

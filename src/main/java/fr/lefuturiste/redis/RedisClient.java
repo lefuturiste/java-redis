@@ -79,8 +79,9 @@ public class RedisClient {
 
     public boolean setJson(String key, JSONObject object) throws IOException {
         String jsonString = object.toString(0);
-        jsonString = jsonString.replaceAll("'", "\'");
-        this.output.println("SET " + key + " '" + jsonString + "'");
+        jsonString = jsonString.replace("\'", "\\\'");
+        String cmd = "SET " + key + " '" + jsonString + "'";
+        this.output.println(cmd);
         return this.input.readLine().equals(RESP_SUCCESS);
     }
 
