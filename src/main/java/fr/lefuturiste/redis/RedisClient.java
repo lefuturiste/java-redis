@@ -9,16 +9,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.Duration;
 
-/**
- * TODO: Unit testing?
- * TODO: Make available on the maven repository ?
- * TODO: namespace
- * TODO: flush
- * TODO: count key
- * TODO: expiration
- * TODO: JSON support
- * TODO: injection protection from user input
- */
 public class RedisClient {
     private final Socket socket;
     private BufferedReader input;
