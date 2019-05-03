@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.UUID;
 
 import static org.junit.Assert.assertTrue;
@@ -118,5 +119,18 @@ public class RedisClientTest {
         Assert.assertTrue(this.redisClient.flushAll());
         Assert.assertFalse(this.redisClient.exists("key1"));
         Assert.assertFalse(this.redisClient.exists("key2"));
+    }
+
+    @Test
+    public void shouldSetExpireSuccessfully() throws IOException, InterruptedException {
+        this.authRedisClient();
+        key = UUID.randomUUID().toString();
+        Assert.assertTrue(this.redisClient.set(key, "content"));
+        Assert.assertTrue(this.redisClient.exists(key));
+        Assert.assertEquals(-1, this.redisClient.ttl(key));
+        Assert.assertTrue(this.redisClient.expire(key, Duration.ofSeconds(1)));
+        Assert.assertEquals(1, this.redisClient.ttl(key));
+        Thread.sleep(1000);
+        Assert.assertEquals(-2, this.redisClient.ttl(key));
     }
 }

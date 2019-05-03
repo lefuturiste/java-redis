@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.Duration;
 
 /**
  * TODO: Unit testing?
@@ -66,9 +67,19 @@ public class RedisClient {
         return this.input.readLine().equals(":1");
     }
 
+    public boolean expire(String key, Duration expiration) throws IOException {
+        this.output.println("EXPIRE " + key + " " + expiration.getSeconds());
+        return this.input.readLine().equals(":1");
+    }
+
+    public int ttl(String key) throws IOException {
+        this.output.println("TTL " + key);
+        return Integer.parseInt(this.input.readLine().replace(":", ""));
+    }
+
     public boolean setJson(String key, JSONObject object) throws IOException {
         String jsonString = object.toString(0);
-        jsonString = jsonString.replaceAll("'", "");
+        jsonString = jsonString.replaceAll("'", "\'");
         this.output.println("SET " + key + " '" + jsonString + "'");
         return this.input.readLine().equals(RESP_SUCCESS);
     }
