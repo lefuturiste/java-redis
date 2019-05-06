@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.UUID;
 
-import static org.junit.Assert.assertTrue;
-
 @FixMethodOrder(MethodSorters.JVM)
 public class RedisClientTest {
 
@@ -38,11 +36,6 @@ public class RedisClientTest {
 
     private void authRedisClient() throws IOException {
         this.redisClient.auth(password);
-    }
-
-    @Test
-    public void shouldAnswerWithTrue() {
-        assertTrue(true);
     }
 
     @Test
