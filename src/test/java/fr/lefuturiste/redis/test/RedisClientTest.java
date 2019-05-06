@@ -16,6 +16,10 @@ import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.JVM)
 public class RedisClientTest {
+
+    private RedisClient redisClient;
+    private String redisHost = "127.0.0.1";
+    private int redisPort = 6379;
     private final String password = "root";
     private static String key = UUID.randomUUID().toString();
     private static String value = UUID.randomUUID().toString();
@@ -27,7 +31,6 @@ public class RedisClientTest {
             .put("int", 123)
             .put("float", 123.123)
             .put("object", new JSONObject().put("yes", true).put("no", false));
-    private RedisClient redisClient;
 
     public RedisClientTest() throws IOException {
         redisClient = new RedisClient();
@@ -51,11 +54,17 @@ public class RedisClientTest {
     @Test
     public void shouldGetTheSocketSuccessfully() {
         Assert.assertNotNull(this.redisClient.getSocket());
-        String redisHost = "127.0.0.1";
-        int redisPort = 6379;
         Assert.assertEquals(redisHost,
                 this.redisClient.getSocket().getInetAddress().toString().replace("/", ""));
         Assert.assertEquals(redisPort, this.redisClient.getSocket().getPort());
+    }
+
+    @Test
+    public void shouldInstantiateCustomClients() throws IOException {
+        RedisClient firstCustomRedisClient = new RedisClient(redisPort);
+        Assert.assertNotNull(firstCustomRedisClient);
+        RedisClient secondCustomRedisClient = new RedisClient(redisHost, redisPort);
+        Assert.assertNotNull(secondCustomRedisClient);
     }
 
     @Test
