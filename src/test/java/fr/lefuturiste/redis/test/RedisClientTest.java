@@ -1,5 +1,6 @@
-package fr.lefuturiste.redis;
+package fr.lefuturiste.redis.test;
 
+import fr.lefuturiste.redis.RedisClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
